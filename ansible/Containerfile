@@ -1,0 +1,27 @@
+# https://www.ansible.com/
+#
+# Note: SELinux requires the :Z attribute set on volumes in Podman/Docker.
+#
+# podman run --rm \
+#     -it \
+#     -v ${PWD}/hosts:/etc/ansible/hosts:Z \
+#     -v ${PWD}/ansible.cfg:/etc/ansible/ansible.cfg:Z \
+#     -v ${HOME}/.ssh:/root/.ssh:Z \
+#     ansible all -m ping
+#
+FROM python:3-alpine
+LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+
+RUN builddeps=' \
+                musl-dev \
+                openssl-dev \
+                libffi-dev \
+                gcc \
+                ' \
+        && apk --no-cache add \
+        ca-certificates \
+        $builddeps \
+        && pip install ansible \
+        && apk del --purge $builddeps
+
+ENTRYPOINT [ "ansible" ]

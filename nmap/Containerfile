@@ -1,0 +1,26 @@
+# nmap podman container image
+#
+# Requires rootful podman to access net interfaces
+#
+# Note: SELinux requires the :Z attribute set when using volumes in Podman/Docker.
+#
+# sudo podman run -it --rm \
+#     --cap-add=NET_RAW \
+#     --cap-add=NET_ADMIN \
+#     --network host \
+#     -v $(pwd):/output:Z \
+#     --name nmap \
+#     nmap <nmap args>
+
+FROM fedora:latest
+LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+
+RUN printf "fastestmirror=True\ndeltarpm=True\n" | tee -a /etc/dnf/dnf.conf \
+    && dnf install -y nmap nmap-ncat \
+    && dnf clean all \
+    && mkdir /output
+
+WORKDIR /output
+
+
+ENTRYPOINT [ "nmap" ]

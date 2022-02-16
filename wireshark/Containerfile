@@ -1,0 +1,43 @@
+# Run Wireshark in podman container
+#
+# Requires rootful podman to access host network.
+#
+# podman run \
+#     --secuirity-opt label=disable \
+#     --net=host \
+#     --cap-add=NET_RAW \
+#     --cap-add=NET_ADMIN \
+#     -e PUID=1000 \
+#     -e PGID=1000 \
+#     -e TZ=America/Chicago \
+#     -e DISPLAY=:0 \
+#     -e XDG_RUNTIME_DIR=/run/user \
+#     -e XDG_SESSION_TYPE=wayland \
+#     -e GDK_BACKEND=wayland \
+#     -e QT_QPA_PLATFORM=wayland \
+#     -e WAYLAND_DISPLAY=wayland-0 \
+#     --mount type=tmpfs,destination=/run/user \
+#     -v /run/user/1000/wayland-0:/run/user/wayland-0 \
+#     -v /tmp/.X11-unix:/tmp/.X11-unix \
+#     --name wireshark \
+#     wireshark
+#
+FROM fedora:latest
+LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+
+RUN printf "fastestmirror=True\ndeltarpm=True\n" | tee -a /etc/dnf/dnf.conf
+RUN dnf install -y wireshark qt5-qtwayland \
+    && dnf clean all
+
+ENV HOME /home/wireshark
+RUN useradd --create-home -g wireshark --home-dir $HOME wireshark \
+    && chown -R wireshark:wireshark $HOME
+
+RUN chown root:wireshark /usr/bin/dumpcap \
+    && setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap
+
+USER wireshark
+
+WORKDIR /home/wireshark
+
+ENTRYPOINT [ "wireshark" ]

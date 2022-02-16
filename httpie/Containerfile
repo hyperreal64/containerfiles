@@ -1,0 +1,33 @@
+# httpie podman container
+#
+# Note: SELinux requires the :Z attribute set on volumes in Podman/Docker
+#
+# To download a file to the PWD:
+# podman run \
+#     --rm \
+#     -it \
+#     -v ${PWD}:/downloads:Z \
+#     httpie -d <url>
+#
+# To see a webpage:
+# podman run \
+#     --rm \
+#     -it \
+#     httpie <url>
+#
+FROM alpine:latest
+LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+
+RUN apk --no-cache add \
+        ca-certificates \
+        gcc \
+        musl-dev \
+        python3 \
+        python3-dev \
+        py3-pip \
+        && pip install httpie httpie-unixsocket
+
+RUN mkdir /downloads
+WORKDIR /downloads
+
+ENTRYPOINT [ "http" ]

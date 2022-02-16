@@ -1,0 +1,12 @@
+# htop in podman container
+#
+# podman run --rm -it \
+#     --pid host
+#     htop
+#
+FROM alpine:latest
+LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+
+RUN apk --no-cache add htop
+
+CMD [ "htop" ]
