@@ -23,7 +23,7 @@
 #     wireshark
 #
 FROM fedora:latest
-LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+LABEL maintainer "Jeffrey Serio <hyperreal@fedoraproject.org>"
 
 RUN printf "fastestmirror=True\ndeltarpm=True\n" | tee -a /etc/dnf/dnf.conf
 RUN dnf install -y wireshark qt5-qtwayland \

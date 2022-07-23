@@ -10,7 +10,7 @@
 #     ansible all -m ping
 #
 FROM python:3-alpine
-LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+LABEL maintainer "Jeffrey Serio <hyperreal@fedoraproject.org>"
 
 RUN builddeps=' \
                 musl-dev \

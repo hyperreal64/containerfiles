@@ -5,7 +5,7 @@
 #     htop
 #
 FROM alpine:latest
-LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+LABEL maintainer "Jeffrey Serio <hyperreal@fedoraproject.org>"
 
 RUN apk --no-cache add htop
 

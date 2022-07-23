@@ -13,7 +13,7 @@
 #     nmap <nmap args>
 
 FROM fedora:latest
-LABEL maintainer "Jeffrey Serio <hyperreal@unixcat.coffee>"
+LABEL maintainer "Jeffrey Serio <hyperreal@fedoraproject.org>"
 
 RUN printf "fastestmirror=True\ndeltarpm=True\n" | tee -a /etc/dnf/dnf.conf \
     && dnf install -y nmap nmap-ncat \
